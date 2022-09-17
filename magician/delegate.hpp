@@ -22,7 +22,6 @@ template<typename R, typename... Args>
 struct delegate<R(Args...)> {
 
   using callback_type = function<R(Args...)>;
-  using free_function_type = R(Args...);
   vector<callback_type> callbacks;
 
   vector<tuple<Args...>> Params;

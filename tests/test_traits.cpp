@@ -27,12 +27,14 @@ TEST(Tuple, TupleDeserializatin) {
 }
 
 TEST(Tuple, UniqueType) {
+  auto v0 = phi::is_unique_type_list<>::value;
   // type list with all type different.
   auto v1 = phi::is_unique_type_list<int, string, double>::value;
   // type list with duplicate type.
   auto v2 = phi::is_unique_type_list<string, string, double>::value;
   // single type list is always unique.
   bool v3 = phi::is_unique_type_list<int>::value;
+  EXPECT_TRUE(v0);
   EXPECT_TRUE(v1);
   EXPECT_FALSE(v2);
   EXPECT_TRUE(v3);
