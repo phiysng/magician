@@ -32,5 +32,8 @@
 *.app
 
 build/
+build-linux
+build-ninja
+Testing
 cmake-build-debug/
 .idea/
