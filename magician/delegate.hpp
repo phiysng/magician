@@ -1,4 +1,7 @@
 #pragma once
+
+#include <type_traits>
+
 namespace phi {
 using namespace std;
 
@@ -27,7 +30,10 @@ struct delegate {
 
   vector<tuple<Args...>> Params;
 
-  void bind(free_function_type func_type) {
+  // introduce a new typename to bring in type deduction, for which we can call int(*)(const int a, const vector<int>& b)
+  // with signature of int(int,vector<int>);
+  template<typename F>
+  void bind(F func_type) {
     callback_type t = [=](Args... args) -> R { return func_type(args...); };
     callbacks.push_back(t);
   }

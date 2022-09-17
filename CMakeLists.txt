@@ -1,5 +1,7 @@
-project(magician)
 cmake_minimum_required(VERSION 3.16)
+cmake_policy(SET CMP0048 NEW)
+
+project(magician VERSION 0.0.1)
 
 enable_testing()
 include(FetchContent)
