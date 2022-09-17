@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
-#include "traits.hpp"
+#include "magician/traits.hpp"
+
 using namespace std;
 
 TEST(HelloTest, TupleSerializatin)

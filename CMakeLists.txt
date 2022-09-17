@@ -13,10 +13,10 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-add_library(delegate INTERFACE delegate.hpp)
+add_library(delegate INTERFACE magician/delegate.hpp)
 target_compile_features(delegate INTERFACE cxx_std_17)
 
-add_library(traits INTERFACE traits.hpp)
+add_library(traits INTERFACE magician/traits.hpp)
 target_compile_features(traits INTERFACE cxx_std_17)
 
 add_executable(test-traits test_traits.cpp)
