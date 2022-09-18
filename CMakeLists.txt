@@ -23,10 +23,10 @@ add_library(traits INTERFACE magician/traits.hpp)
 target_include_directories(traits INTERFACE .)
 target_compile_features(traits INTERFACE cxx_std_17)
 
-add_executable(test-traits test_traits.cpp)
+add_executable(test-traits tests/test_traits.cpp)
 target_link_libraries(test-traits PRIVATE GTest::gtest_main traits)
 
-add_executable(test-delegate test_delegate.cpp)
+add_executable(test-delegate tests/test_delegate.cpp)
 target_link_libraries(test-delegate PRIVATE GTest::gtest_main delegate)
 
 include(GoogleTest)

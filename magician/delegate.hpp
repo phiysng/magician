@@ -6,10 +6,7 @@ namespace phi {
 using namespace std;
 
 ///
-/// \brief The Delegate class
-/// TODO:
-/// 1. support free function , static member function , member function,
-/// functor(lambda)
+/// \brief The delegate class
 ///
 /// 2. support rvaule
 ///
@@ -32,6 +29,9 @@ struct delegate {
 
   // introduce a new typename to bring in type deduction, for which we can call int(*)(const int a, const vector<int>& b)
   // with signature of int(int,vector<int>);
+  // handle type of callable as listed:
+  // 1. free function / static member function
+  // 2. functor / lambda expression
   template<typename F>
   void bind(F func_type) {
     callback_type t = [=](Args... args) -> R { return func_type(args...); };
@@ -71,18 +71,6 @@ struct delegate {
     // check the whether pointer is valid.
     callback_type t = [=](Args... args) -> R {
       return invoke(mem_type, ptr, args...);
-    };
-    callbacks.push_back((t));
-  }
-
-  // functor or lambda
-  template<typename T,
-      typename = enable_if_t<disjunction_v<
-          is_same<decltype(&T::operator()), R (T::*)(Args...)>,
-          is_same<decltype(&T::operator()), R (T::*)(Args...) const>>>>
-  void bind(T functor) {
-    callback_type t = [=](Args... args) mutable -> R {
-      return (functor)(args...);
     };
     callbacks.push_back((t));
   }

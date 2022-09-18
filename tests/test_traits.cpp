@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <magician/traits.hpp>
+#include "magician/traits.hpp"
 
 using namespace std;
 
