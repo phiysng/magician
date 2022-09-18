@@ -5,6 +5,9 @@
 namespace phi {
 using namespace std;
 
+template<typename T>
+struct delegate;
+
 ///
 /// \brief The delegate class
 ///
@@ -14,12 +17,9 @@ using namespace std;
 ///
 /// 4. smart pointer support
 ///
-/// Design Decision:
-/// 1. support functor mutable?
-/// TODO: loose signature for reference.
 ///
 template<typename R, typename... Args>
-struct delegate {
+struct delegate<R(Args...)> {
 
   using callback_type = function<R(Args...)>;
   using free_function_type = R(Args...);
@@ -75,15 +75,10 @@ struct delegate {
     callbacks.push_back((t));
   }
 
-  void emit(Args &&... args) {
+  template<class... Ts>
+  void emit(Ts &&... args) {
     for (auto &cb : callbacks) {
-      cb(std::forward<Args>(args)...);
-    }
-  }
-
-  void emit(const Args &... args) {
-    for (auto &cb : callbacks) {
-      cb((args)...);
+      cb(forward<Ts>(args)...);
     }
   }
 

@@ -17,14 +17,14 @@ int delegate_foo(const int &a, const vector<int> &vec) {
 
 using namespace std;
 TEST(Delegate, FreeFunction) {
-  phi::delegate<int, int, vector<int>> test_delegate;
+  phi::delegate<int(int, vector<int>)> test_delegate;
   test_delegate.bind(&phi::test::delegate_foo);
   test_delegate.emit(9, vector{1, 2, 3});
   EXPECT_EQ(phi::test::cnt_foo, 1);
 }
 
 TEST(Delegate, Lambda) {
-  phi::delegate<int, int, vector<int>> test_delegate;
+  phi::delegate<int(int, vector<int>)> test_delegate;
   int cnt = 0;
   test_delegate.bind([&cnt](int x, vector<int> vec) {
     cnt++;
@@ -44,10 +44,45 @@ TEST(Delegate, Functor) {
     int &cnt;
   };
 
-  phi::delegate<int, int, vector<int>> test_delegate;
+  phi::delegate<int(int, vector<int>)> test_delegate;
   int cnt = 0;
   test_delegate.bind(TestDelegate(cnt));
   test_delegate.emit(9, vector{1, 2, 3});
   EXPECT_EQ(cnt, 1);
 
+}
+
+namespace phi::test {
+struct delegate_shared_test {
+public:
+  delegate_shared_test(int &in_cnt) : cnt(in_cnt) {}
+  void foo() {
+    cnt ++;
+  }
+  int &cnt;
+};
+}
+
+TEST(Delegate, SharedPointer) {
+
+  phi::delegate<void()> test_delegate;
+  int cnt = 0;
+  auto shared_test = make_shared<phi::test::delegate_shared_test>(cnt);
+  test_delegate.bind(shared_test, &phi::test::delegate_shared_test::foo);
+  test_delegate.emit();
+  EXPECT_EQ(cnt, 1);
+}
+
+TEST(Delegate, WeakPointer) {
+  phi::delegate<void()> test_delegate;
+  int cnt = 0;
+  auto shared_test = make_shared<phi::test::delegate_shared_test>(cnt);
+  test_delegate.bind(weak_ptr(shared_test), &phi::test::delegate_shared_test::foo);
+  test_delegate.emit();
+  EXPECT_EQ(cnt, 1);
+
+  // weak ptr is invalid then.
+  shared_test.reset();
+  test_delegate.emit();
+  EXPECT_EQ(cnt, 1);
 }
