@@ -1,11 +1,11 @@
 #pragma once
 
 #include <cstdlib>
+#include <nlohmann/json.hpp>
 #include <tuple>
 #include <type_traits>
 #include <utility>
 #include <vector>
-
 namespace phi {
 using namespace std;
 
@@ -35,6 +35,33 @@ template <typename... Ts> void deserialize(tuple<Ts...> &t, vector<int> in) {
   }
   internal::deserialize_impl(t, in, index_sequence_for<Ts...>{});
 }
+
+namespace experimental {
+template<typename T, size_t... Is>
+void serialize_impl(T &t, nlohmann::json &object, index_sequence<Is...>) {
+  ((object[to_string(Is)] = get<Is>(t)), ...);
+}
+
+template<typename... Ts>
+string serialize(tuple<Ts...> &t) {
+  nlohmann::json object;
+  serialize_impl(t, object, index_sequence_for<Ts...>{});
+  return object.dump();
+}
+
+
+template<typename T, size_t... Is>
+void deserialize_impl(T &t, string_view sw, index_sequence<Is...>) {
+  auto object = nlohmann::json::parse(sw);
+  ((get<Is>(t) = object[to_string(Is)]), ...);
+}
+
+template<typename... Ts>
+void deserialize(tuple<Ts...> &t, string_view sw) {
+  constexpr int size_tuple = sizeof...(Ts);
+  deserialize_impl(t, sw, index_sequence_for<Ts...>{});
+}
+}  // namespace experimental
 
 /// define a primary template to handle the default situation.
 template <typename... Ts> struct is_unique_type_list : true_type {};

@@ -39,3 +39,19 @@ TEST(Tuple, UniqueType) {
   EXPECT_FALSE(v2);
   EXPECT_TRUE(v3);
 }
+
+
+TEST(Tuple,ToAndFromJSON){
+  using pair_of_4_int = std::tuple<int, int, int, int>;
+  pair_of_4_int t{1, 2, 3, 4};
+
+  auto str = phi::experimental::serialize(t);
+
+  pair_of_4_int out;
+  phi::experimental::deserialize(out,str);
+
+  EXPECT_EQ(get<0>(out),1);
+  EXPECT_EQ(get<1>(out),2);
+  EXPECT_EQ(get<2>(out),3);
+  EXPECT_EQ(get<3>(out),4);
+}
