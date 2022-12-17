@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
-
+#include <tuple>
+#include <list>
 #include "magician/traits.hpp"
 
 using namespace std;
@@ -54,4 +55,13 @@ TEST(Tuple,ToAndFromJSON){
   EXPECT_EQ(get<1>(out),2);
   EXPECT_EQ(get<2>(out),3);
   EXPECT_EQ(get<3>(out),4);
+}
+
+
+TEST(Traits, IsVector) {
+  using std::list;
+
+  EXPECT_TRUE(phi::vector_traits::is_vector<vector<int>>::value);
+  EXPECT_TRUE(phi::vector_traits::is_vector<vector<int&>>::value);
+  EXPECT_FALSE(phi::vector_traits::is_vector<list<int>>::value);
 }
