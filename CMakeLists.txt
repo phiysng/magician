@@ -15,8 +15,9 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz)
-FetchContent_MakeAvailable(json)
+add_library(json INTERFACE)
+target_include_directories(json INTERFACE third_party/)
+add_library(nlohmann_json::nlohmann_json ALIAS json)
 
 add_library(delegate INTERFACE magician/delegate.hpp)
 target_include_directories(delegate INTERFACE .)
