@@ -27,12 +27,21 @@ target_include_directories(traits INTERFACE .)
 target_compile_features(traits INTERFACE cxx_std_17)
 target_link_libraries(traits INTERFACE nlohmann_json::nlohmann_json)
 
+add_library(static-reflection INTERFACE magician/static_reflection.hpp)
+target_include_directories(static-reflection INTERFACE .)
+target_compile_features(static-reflection INTERFACE cxx_std_17)
+target_link_libraries(static-reflection INTERFACE nlohmann_json::nlohmann_json)
+
 add_executable(test-traits tests/test_traits.cpp)
 target_link_libraries(test-traits PRIVATE GTest::gtest_main traits)
 
 add_executable(test-delegate tests/test_delegate.cpp)
 target_link_libraries(test-delegate PRIVATE GTest::gtest_main nlohmann_json::nlohmann_json delegate)
 
+add_executable(test-static-reflection tests/test_static_reflection.cpp)
+target_link_libraries(test-static-reflection PRIVATE GTest::gtest_main nlohmann_json::nlohmann_json static-reflection)
+
 include(GoogleTest)
 gtest_discover_tests(test-traits)
 gtest_discover_tests(test-delegate)
+gtest_discover_tests(test-static-reflection)

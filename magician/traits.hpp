@@ -10,6 +10,18 @@ namespace phi {
 using namespace std;
 
 namespace internal {
+template <typename T,typename Fn , size_t... Is>
+auto traverse_impl(const T &t,Fn& fn ,index_sequence<Is...>) {
+  return vector<int>({get<Is>(t)...});
+}
+} // namespace internal
+
+template <typename Fn , typename... Ts>
+auto traverse(tuple<Ts...> &t,Fn& fn) {
+  return internal::traverse_impl(t, fn, index_sequence_for<Ts...>{});
+}
+
+namespace internal {
 template <typename T, size_t... Is>
 auto serialize_impl(const T &t, index_sequence<Is...>) {
   return vector<int>({get<Is>(t)...});
@@ -74,4 +86,27 @@ struct is_unique_type_list<T, Ts...>
                                        is_unique_type_list<Ts...>, false_type>,
                          true_type> {};
 
+namespace vector_traits {
+
+template<typename T>
+struct remove_vector {
+};
+
+template<typename T>
+struct remove_vector<vector<T>> {
+  using type = T;
+};
+
+template<typename T, typename = void>
+struct is_vector : false_type {};
+
+template<typename T>
+struct is_vector<T, void_t<typename remove_vector<T>::type>> : true_type {
+  using type = typename remove_vector<T>::type;
+};
+
+template<typename T>
+constexpr bool is_vector_v = is_vector<T>::value;
+
+}
 } // namespace phi
