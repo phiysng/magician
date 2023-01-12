@@ -65,3 +65,55 @@ TEST(Traits, IsVector) {
   EXPECT_TRUE(phi::vector_traits::is_vector<vector<int&>>::value);
   EXPECT_FALSE(phi::vector_traits::is_vector<list<int>>::value);
 }
+
+/**
+ * basic usage
+ */
+TEST(Traits, Overloaded) {
+  auto add = [](int x) { cout << x + 1 << endl; };
+  auto join = [](const string &s) { cout << s << endl; };
+  auto h = phi::overloaded<decltype(add), decltype(join)>{add, join};
+
+  h(1);
+  h("Hello World");
+}
+
+/**
+ * make_overloaded helper function
+ */
+TEST(Traits, MakeOverloaded) {
+  int x = 0;
+  constexpr int value = 10;
+  string left = "<";
+  string right = ">";
+  string combined = left + right;
+  auto add = [&x](int i) { x += i; };
+  auto join = [&left](const string &s) { left += s; };
+
+  auto h = phi::deprecated::make_overloaded(add, join);
+  h(value);
+  h(right);
+
+  EXPECT_EQ(value, x);
+  EXPECT_EQ(left, combined);
+}
+
+/**
+ * CDAT implementation
+ */
+TEST(Traits, CDAT) {
+  int x = 0;
+  constexpr int value = 10;
+  string left = "<";
+  string right = ">";
+  string combined = left + right;
+  auto add = [&x](int i) { x += i; };
+  auto join = [&left](const string &s) { left += s; };
+
+  auto h = phi::overloaded{add, join};
+  h(value);
+  h(right);
+
+  EXPECT_EQ(value, x);
+  EXPECT_EQ(left, combined);
+}

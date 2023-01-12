@@ -109,4 +109,22 @@ template<typename T>
 constexpr bool is_vector_v = is_vector<T>::value;
 
 }
+
+template<typename ...Ts>
+struct overloaded : Ts ... {
+  using Ts::operator()...;
+};
+
+// non-optimal solution
+namespace deprecated {
+template<typename ...Ts>
+auto make_overloaded(Ts... ts) {
+  return overloaded<Ts...>{ts...};
+}
+}
+
+// see https://en.cppreference.com/w/cpp/language/class_template_argument_deduction for more details.
+template<typename ...Ts>
+overloaded(Ts...) -> overloaded<Ts...>;
+
 } // namespace phi
