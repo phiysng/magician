@@ -117,3 +117,27 @@ TEST(Traits, CDAT) {
   EXPECT_EQ(value, x);
   EXPECT_EQ(left, combined);
 }
+
+enum class Status_A{
+  A_0,
+  A_1,
+  A_2,
+};
+
+enum class Status_B{
+  B_0,
+  B_1,
+  B_2,
+};
+
+enum class Status_C{
+  C_0,
+  C_1,
+  C_2,
+};
+
+TEST(Status,Base){
+  phi::StatusManager<Status_A,Status_B> manager;
+  manager.addState(Status_A::A_0);
+//  manager.addState(Status_C::C_0);
+}

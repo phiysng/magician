@@ -127,4 +127,22 @@ auto make_overloaded(Ts... ts) {
 template<typename ...Ts>
 overloaded(Ts...) -> overloaded<Ts...>;
 
+template<typename T>
+struct StatusNode{
+  T t;
+
+protected:
+  void _addState(T _t){
+    t = _t;
+  }
+};
+
+template<typename ...Ts>
+struct StatusManager : StatusNode<Ts> ... {
+
+  template<typename T>
+  void addState(T t) {
+    StatusNode<T>::_addState(t);
+  }
+};
 } // namespace phi
