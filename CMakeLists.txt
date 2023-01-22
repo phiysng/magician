@@ -61,5 +61,6 @@ target_link_libraries(test-static-reflection PRIVATE GTest::gtest_main nlohmann_
 
 include(GoogleTest)
 gtest_discover_tests(test-traits)
+gtest_discover_tests(test-traits_cxx11)
 gtest_discover_tests(test-delegate)
 gtest_discover_tests(test-static-reflection)

@@ -24,7 +24,7 @@ TEST(OverLoadedCXX11, Simple) {
 /**
  * make_overloaded helper function
  */
-TEST(Traits, MakeOverloaded) {
+TEST(OverLoadedCXX11, MakeOverloaded) {
   int x = 0;
   constexpr int value = 10;
   string left = "<";
@@ -44,7 +44,7 @@ TEST(Traits, MakeOverloaded) {
 /**
  * CDAT implementation
  */
-TEST(Traits, CDAT) {
+TEST(OverLoadedCXX11, CDAT) {
   int x = 0;
   constexpr int value = 10;
   string left = "<";
