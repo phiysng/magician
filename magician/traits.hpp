@@ -145,4 +145,23 @@ struct StatusManager : StatusNode<Ts> ... {
     StatusNode<T>::_addState(t);
   }
 };
+
+namespace util {
+
+namespace impl {
+// helper function to expand the tuple
+template <typename F, typename Tuple, size_t... Is>
+auto apply_impl(F &&f, Tuple &&t, index_sequence<Is...>) {
+  return invoke(std::forward<F>(f), get<Is>(t)...);
+}
+} // namespace impl
+
+template <typename F, typename Tuple>
+auto apply(F &&f, Tuple &&t) {
+  return impl::apply_impl(
+      std::forward<F>(f), std::forward<Tuple>(t),
+      make_index_sequence<
+          tuple_size<typename remove_reference<Tuple>::type>::value>{});
+}
+} // namespace util
 } // namespace phi
