@@ -28,7 +28,7 @@ add_library(delegate INTERFACE magician/delegate.hpp)
 target_include_directories(delegate INTERFACE .)
 target_compile_features(delegate INTERFACE cxx_std_17)
 
-add_library(traits INTERFACE magician/traits.hpp)
+add_library(traits INTERFACE magician/traits.hpp magician/trivial_type_traits.h)
 target_include_directories(traits INTERFACE .)
 target_compile_features(traits INTERFACE cxx_std_17)
 target_link_libraries(traits INTERFACE nlohmann_json::nlohmann_json)
@@ -42,7 +42,7 @@ target_include_directories(static-reflection INTERFACE .)
 target_compile_features(static-reflection INTERFACE cxx_std_17)
 target_link_libraries(static-reflection INTERFACE nlohmann_json::nlohmann_json)
 
-add_executable(test-traits tests/test_traits.cpp)
+add_executable(test-traits tests/test_traits.cpp tests/test_trivial_type_traits.cpp)
 target_link_libraries(test-traits PRIVATE GTest::gtest_main traits)
 
 add_executable(test-traits_cxx11 tests/test_traits_cxx11.cpp)
