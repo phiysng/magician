@@ -44,8 +44,10 @@ target_link_libraries(static-reflection INTERFACE nlohmann_json::nlohmann_json)
 
 add_executable(test-traits tests/test_traits.cpp tests/test_trivial_type_traits.cpp)
 target_link_libraries(test-traits PRIVATE GTest::gtest_main traits)
-target_link_libraries(test-traits PRIVATE
+if(WIN32)
+  target_link_libraries(test-traits PRIVATE
         $<$<CXX_COMPILER_ID:GNU>:-static gcc stdc++ winpthread>)
+endif()
 
 add_executable(test-traits_cxx11 tests/test_traits_cxx11.cpp)
 target_link_libraries(test-traits_cxx11 PRIVATE GTest::gtest_main traits_cxx11)
@@ -54,18 +56,24 @@ target_compile_options(test-traits_cxx11 PRIVATE
         $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
         $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -Werror>
         )
-target_link_libraries(test-traits_cxx11 PRIVATE
+if(WIN32)
+  target_link_libraries(test-traits_cxx11 PRIVATE
         $<$<CXX_COMPILER_ID:GNU>:-static gcc stdc++ winpthread>)
+endif()
 
 add_executable(test-delegate tests/test_delegate.cpp)
 target_link_libraries(test-delegate PRIVATE GTest::gtest_main nlohmann_json::nlohmann_json delegate)
-target_link_libraries(test-delegate PRIVATE
+if(WIN32)
+  target_link_libraries(test-delegate PRIVATE
         $<$<CXX_COMPILER_ID:GNU>:-static gcc stdc++ winpthread>)
+endif()
 
 add_executable(test-static-reflection tests/test_static_reflection.cpp)
 target_link_libraries(test-static-reflection PRIVATE GTest::gtest_main nlohmann_json::nlohmann_json static-reflection)
-target_link_libraries(test-static-reflection PRIVATE
+if(WIN32)
+  target_link_libraries(test-static-reflection PRIVATE
         $<$<CXX_COMPILER_ID:GNU>:-static gcc stdc++ winpthread>)
+endif()
 
 include(GoogleTest)
 gtest_discover_tests(test-traits)
