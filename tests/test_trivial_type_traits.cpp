@@ -22,5 +22,4 @@ TEST(TraisUtil, Apply) {
   int r = phi::apply(consumer, params);
 
   EXPECT_EQ(r, EXPECT_RET);
-  auto size = phi::make_index_sequence<1>::size;
 }

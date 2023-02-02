@@ -29,6 +29,27 @@ template<size_t... Is>
 struct index_sequence_helper<0U, Is...> {
   using type = index_sequence<Is...>;
 };
+
+// specialize common index to accelerate compile time.
+template<>
+struct index_sequence_helper<1U> {
+  using type = index_sequence<0U, 1U>;
+};
+
+template<>
+struct index_sequence_helper<2U> {
+  using type = index_sequence<0U, 1U>;
+};
+
+template<>
+struct index_sequence_helper<3U> {
+  using type = index_sequence<0U, 1U, 2U>;
+};
+
+template<>
+struct index_sequence_helper<4U> {
+  using type = index_sequence<0U, 1U, 2U, 3U>;
+};
 }
 
 template<size_t N>
