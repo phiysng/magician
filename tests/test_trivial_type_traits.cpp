@@ -11,7 +11,7 @@ TEST(TraisUtil, Apply) {
   constexpr int EXPECT_CODE = 200;
   constexpr int EXPECT_RET = 500;
   const string EXPECT_MSG = "SUCCESS";
-  auto consumer = [&EXPECT_CODE, EXPECT_MSG](int &code, string &msg) {
+  auto consumer = [&EXPECT_CODE, &EXPECT_MSG,&EXPECT_RET](int &code, string &msg) {
     EXPECT_EQ(code, EXPECT_CODE);
     EXPECT_EQ(msg, EXPECT_MSG);
 
