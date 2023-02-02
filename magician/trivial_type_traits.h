@@ -16,6 +16,16 @@
 namespace phi {
 using namespace std;
 
+/**
+ * remove the reference in type Tuple.
+ * the default implementation of tuple do not accept reference of some type , which is annoying in practise.
+ * @see https://stackoverflow.com/questions/45959862/resulting-in-an-error-incomplete-type-while-using-stdtuple-size
+ *
+ */
+template<typename Tuple>
+struct tuple_size_ex : tuple_size<remove_reference_t<Tuple>> {
+};
+
 template<size_t... Is>
 struct index_sequence {
   static constexpr size_t size = sizeof...(Is);
@@ -68,7 +78,7 @@ auto apply(F &&f, Tuple &&t) {
   return impl::apply_impl(
       std::forward<F>(f), std::forward<Tuple>(t),
       phi::make_index_sequence<
-          tuple_size<typename remove_reference<Tuple>::type>::value>{});
+          tuple_size_ex<Tuple>::value>{});
 }
 }
 
